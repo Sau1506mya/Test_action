@@ -33,8 +33,9 @@ runs:
         UP=0
         for i in $(seq 1 30); do
           kubectl get nodes
-          NODECOUNT=$(kubectl get nodes | grep kind-control-plane | grep -v NotReady | wc -l)
-          if [ $NODECOUNT -eq "1" ]; then
+          READYNODECOUNT=$(kubectl get nodes | grep kind- | grep -v NotReady | wc -l)
+          NOTREADYNODECOUNT=$(kubectl get nodes | grep kind- | grep NotReady | wc -l)
+          if [ $READYNODECOUNT -gt 0 -a $NOTREADYNODECOUNT -eq "0" ]; then
             UP=1
             break
           fi
